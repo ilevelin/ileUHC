@@ -1,0 +1,9 @@
+name: IleUHC
+version: '${project.version}'
+main: ilevelin.ileuhc.Main
+api-version: 1.19
+
+commands:
+  uhc:
+    description: Central command of the plugin. Use "/uhc help" for more info
+    usage: /uhc
