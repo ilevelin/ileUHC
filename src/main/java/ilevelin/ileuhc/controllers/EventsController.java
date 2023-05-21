@@ -122,18 +122,7 @@ public class EventsController implements Listener {
                         drop.setType(Material.GOLD_INGOT);
                 });
                 break;
-
-            case PLAYER:
-                Player killer = event.getEntity().getKiller();
-                if (killer != null) {
-                    StatsController.getInstance().addKilledPlayer(killer.getDisplayName());
-                    StatsController.getInstance().setDeathSource(((Player) event.getEntity()).getDisplayName(), DeathSource.PLAYER);
-                }
-                else
-                    StatsController.getInstance().setDeathSource(((Player) event.getEntity()).getDisplayName(), DeathSource.OTHER);
         }
-
-
     }
 
     @EventHandler
@@ -155,6 +144,13 @@ public class EventsController implements Listener {
                 .toStringWithoutResetEnd());
         playerHeadStack.setItemMeta(playerHeadMeta);
         event.getDrops().add(playerHeadStack);
+
+        Player killer = deadPlayer.getKiller();
+        if (killer != null) {
+            StatsController.getInstance().addKilledPlayer(killer.getDisplayName());
+            StatsController.getInstance().setDeathSource(deadPlayer.getDisplayName(), DeathSource.PLAYER);
+        } else
+            StatsController.getInstance().setDeathSource(deadPlayer.getDisplayName(), DeathSource.OTHER);
     }
 
     @EventHandler
