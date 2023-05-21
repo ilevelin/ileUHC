@@ -232,6 +232,7 @@ public class GameController {
     private void startGame() {
         World auxWorld = Bukkit.getServer().getWorlds().get(0);
         for (World world : Bukkit.getServer().getWorlds()) {
+            world.setGameRule(GameRule.NATURAL_REGENERATION, false);
             if (world.getEnvironment() == World.Environment.NORMAL)
                 auxWorld = world;
         }
