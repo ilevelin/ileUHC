@@ -31,81 +31,81 @@ public class EventsController implements Listener {
 
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
-        String itemDisplayName = event.getItem().getItemMeta().getDisplayName();
+        String consumedItemDisplayName = event.getItem().getItemMeta().getDisplayName();
 
-        if (itemDisplayName.equals(new ItemStack(Material.GOLDEN_APPLE).getItemMeta().getDisplayName())) {
+        if (consumedItemDisplayName.equals(new ItemStack(Material.GOLDEN_APPLE).getItemMeta().getDisplayName())) {
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.GOLDEN_APPLE);
             return;
         }
 
-        if (itemDisplayName.equals(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE).getItemMeta().getDisplayName())) {
+        if (consumedItemDisplayName.equals(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE).getItemMeta().getDisplayName())) {
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ENCHANTED_GOLDEN_APPLE);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.WITHER_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.WITHER_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.WITHER_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.WITHER_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.PLAYER_HEAD_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.PLAYER_HEAD_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.PLAYER_HEAD_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.PLAYER_HEAD_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.SUPER_GOLD_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.SUPER_GOLD_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.SUPER_GOLD_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.SUPER_GOLD_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.DIAMOND_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.DIAMOND_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.DIAMOND_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.DIAMOND_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.BLUE_GOLD_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.BLUE_GOLD_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.BLUE_GOLD_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.BLUE_GOLD_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ROYAL_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ROYAL_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.ROYAL_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ROYAL_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ALLOYED_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ALLOYED_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.ALLOYED_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ALLOYED_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.MIDAS_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.MIDAS_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.MIDAS_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.MIDAS_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.GOD_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.GOD_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.GOD_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.GOD_APPLE);
             event.setCancelled(true);
         }
 
-        if (itemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.COLLECTOR_APPLE))) {
+        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.COLLECTOR_APPLE))) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
             CustomItemEffect.applyEffect(event.getPlayer(), AppleType.COLLECTOR_APPLE);
             StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.COLLECTOR_APPLE);
