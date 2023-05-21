@@ -1,6 +1,7 @@
 package ilevelin.ileuhc.controllers;
 
 import ilevelin.ileuhc.utils.Messenger;
+import ilevelin.ileuhc.utils.NumberFormatter;
 import ilevelin.ileuhc.utils.enums.ChatColor;
 import ilevelin.ileuhc.utils.enums.GameStartCode;
 import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
@@ -459,7 +460,10 @@ public class GameController {
                 scoreboardContent.add(new FormattedTextBlock(playerName + " -").setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true))
                         + new FormattedTextBlock(Bukkit.getServer().getPlayer(playerName).getHealth()+"❤").setColor(ChatColor.RED).toString());
             else
-                scoreboardContent.add(playerName + " - " + new FormattedTextBlock(Bukkit.getServer().getPlayer(playerName).getHealth()+"❤").setColor(ChatColor.RED).toString());
+                scoreboardContent.add(playerName + " - " + new FormattedTextBlock(
+                        NumberFormatter.formatter.format(Bukkit.getServer().getPlayer(playerName).getHealth())+"❤")
+                        .setColor(ChatColor.RED)
+                        .toString());
         });
         deadPlayers.forEach(playerName -> {
             scoreboardContent.add(new FormattedTextBlock(playerName).setColor(ChatColor.GRAY).setFormatterBlock(new TextFormatterBlock().setStrikethrough(true).setItalic(true)).toString());

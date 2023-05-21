@@ -1,5 +1,6 @@
 package ilevelin.ileuhc.utils.gameStats;
 
+import ilevelin.ileuhc.utils.NumberFormatter;
 import ilevelin.ileuhc.utils.enums.AppleType;
 import ilevelin.ileuhc.utils.enums.DeathSource;
 
@@ -48,9 +49,9 @@ public class PlayerStats {
 
     @Override
     public String toString() {
-        return playerName + '\t' + place + '\t' + normalizedPlace + '\t' + "deathcausehere" + '\t' + "0" + '\t' +
-                getApplesAsString() + '\t' + totalDamageReceived + '\t' + lifeHealed + '\t' +
-                damageDealtToPlayers + '\t' + damageReceivedFromPlayers + '\t' +
+        return playerName + '\t' + place + '\t' + normalizedPlace + '\t' + deathSource + '\t' + "0?" + '\t' +
+                getApplesAsString() + '\t' + NumberFormatter.formatter.format(totalDamageReceived) + '\t' + NumberFormatter.formatter.format(lifeHealed) + '\t' +
+                NumberFormatter.formatter.format(damageDealtToPlayers) + '\t' + NumberFormatter.formatter.format(damageReceivedFromPlayers) + '\t' +
                 playersKilled + '\t' + (deathSource == DeathSource.PLAYER ? 1 : 0);
     }
 

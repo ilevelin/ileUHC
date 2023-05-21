@@ -58,10 +58,10 @@ public class StatsController {
             File file = new File("./plugins/ileUHC/gameHistory/"+dateAsString+".txt");
             FileWriter statsFile = new FileWriter(file);
 
-            statsFile.write("Game Stats - Paste into \"GameHistory\"\n");
+            statsFile.write("## Game Stats - Paste into an empty line in \"GameHistory\"\n");
             statsFile.write("ID\t" + LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE) + "\t" + GameSetupController.getInstance().getPluginVersion() + "\t" + GameSetupController.getInstance().getTeamFormat() + "\t" +
                     playerStatsList.size() + "\t" + GameController.getInstance().getFormattedGameTime() + "\t" + GameSetupController.getInstance().getFormattedTimeLimit() + "\t" + GameSetupController.getInstance().getFormattedTreatyTime() + '\n');
-            statsFile.write("Player Stats - Create a new tab named \"GameX\" where X is the game ID and paste\n");
+            statsFile.write("## Player Stats - Create a new tab named \"GameX\" where X is the game ID and paste\n");
             for (PlayerStats playerStats : playerStatsList)
                 statsFile.write(playerStats.toString()+'\n');
             statsFile.close();
