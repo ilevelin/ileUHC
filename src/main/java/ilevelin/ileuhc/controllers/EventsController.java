@@ -163,7 +163,7 @@ public class EventsController implements Listener {
         Entity attackingEntity = event.getDamager();
         if (damagedEntity instanceof Player && attackingEntity instanceof Player) {
             StatsController.getInstance().addDamageToPlayers(((Player) attackingEntity).getDisplayName(), (float) event.getFinalDamage());
-            StatsController.getInstance().addReceivedFromPlayers(((Player) attackingEntity).getDisplayName(), (float) event.getFinalDamage());
+            StatsController.getInstance().addReceivedFromPlayers(((Player) damagedEntity).getDisplayName(), (float) event.getFinalDamage());
         }
     }
 
