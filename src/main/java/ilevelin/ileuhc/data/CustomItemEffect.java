@@ -24,42 +24,36 @@ public class CustomItemEffect {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10*20, 1));
                 break;
 
+            case TEAL_APPLE:
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(2));
+                break;
+
             case DIAMOND_APPLE:
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(4));
+                break;
+
+            case TEAL_GOLD_APPLE:
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 160*20, 0));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(2));
                 break;
 
             case BLUE_GOLD_APPLE:
                 player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 160*20, 0));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 1));
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(2));
-                break;
-
-            case ROYAL_APPLE:
                 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(4));
                 break;
 
-            case ALLOYED_APPLE:
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(4));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 180*20, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 10*20, 1));
-                break;
-
-            case MIDAS_APPLE:
-                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 240*20, 2));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 8*20, 2));
-                break;
-
-            case GOD_APPLE:
-                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(8));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 300*20, 3));
+            case KING_APPLE:
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 180*20, 2));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 3));
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(4));
                 break;
 
             case COLLECTOR_APPLE:
-                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10*60*20, 5));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 10*60*20, 4));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 5*20, 4));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120*20, 1));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 120*20, 0));
+                player.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(getHeartAdderModifier(8));
                 break;
         }
     }

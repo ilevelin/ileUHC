@@ -32,95 +32,39 @@ public class EventsController implements Listener {
     @EventHandler
     public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         String consumedItemDisplayName = event.getItem().getItemMeta().getDisplayName();
+        AppleType consumedAppleType = null;
 
         if (consumedItemDisplayName.equals(new ItemStack(Material.GOLDEN_APPLE).getItemMeta().getDisplayName())) {
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.GOLDEN_APPLE);
-            return;
+            consumedAppleType = AppleType.GOLDEN_APPLE;
+        } else if (consumedItemDisplayName.equals(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE).getItemMeta().getDisplayName())) {
+            consumedAppleType = AppleType.ENCHANTED_GOLDEN_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.WITHER_APPLE))) {
+            consumedAppleType = AppleType.WITHER_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.PLAYER_HEAD_APPLE))) {
+            consumedAppleType = AppleType.PLAYER_HEAD_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.SUPER_GOLD_APPLE))) {
+            consumedAppleType = AppleType.SUPER_GOLD_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.TEAL_APPLE))) {
+            consumedAppleType = AppleType.TEAL_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.DIAMOND_APPLE))) {
+            consumedAppleType = AppleType.DIAMOND_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.TEAL_GOLD_APPLE))) {
+            consumedAppleType = AppleType.TEAL_GOLD_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.BLUE_GOLD_APPLE))) {
+            consumedAppleType = AppleType.BLUE_GOLD_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.KING_APPLE))) {
+            consumedAppleType = AppleType.KING_APPLE;
+        } else if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.COLLECTOR_APPLE))) {
+            consumedAppleType = AppleType.COLLECTOR_APPLE;
         }
 
-        if (consumedItemDisplayName.equals(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE).getItemMeta().getDisplayName())) {
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ENCHANTED_GOLDEN_APPLE);
-            return;
-        }
+        if (consumedAppleType == null) return;
 
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.WITHER_APPLE))) {
+        StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), consumedAppleType);
+        if (consumedAppleType != AppleType.GOLDEN_APPLE && consumedAppleType != AppleType.ENCHANTED_GOLDEN_APPLE) {
             event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.WITHER_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.WITHER_APPLE);
+            CustomItemEffect.applyEffect(event.getPlayer(), consumedAppleType);
             event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.PLAYER_HEAD_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.PLAYER_HEAD_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.PLAYER_HEAD_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.SUPER_GOLD_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.SUPER_GOLD_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.SUPER_GOLD_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.DIAMOND_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.DIAMOND_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.DIAMOND_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.BLUE_GOLD_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.BLUE_GOLD_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.BLUE_GOLD_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ROYAL_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.ROYAL_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ROYAL_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.ALLOYED_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.ALLOYED_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.ALLOYED_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.MIDAS_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.MIDAS_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.MIDAS_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.GOD_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.GOD_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.GOD_APPLE);
-            event.setCancelled(true);
-            return;
-        }
-
-        if (consumedItemDisplayName.equals(customItemBuilderInstance.getFormattedName(CustomItemList.COLLECTOR_APPLE))) {
-            event.getPlayer().getItemInUse().setAmount(event.getPlayer().getItemInUse().getAmount()-1);
-            CustomItemEffect.applyEffect(event.getPlayer(), AppleType.COLLECTOR_APPLE);
-            StatsController.getInstance().addConsumedApple(event.getPlayer().getDisplayName(), AppleType.COLLECTOR_APPLE);
-            event.setCancelled(true);
-            return;
         }
     }
 

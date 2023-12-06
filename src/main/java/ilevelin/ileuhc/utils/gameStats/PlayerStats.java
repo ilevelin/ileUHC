@@ -60,12 +60,11 @@ public class PlayerStats {
                 (applesConsumed.get(AppleType.WITHER_APPLE) == null ? 0 : applesConsumed.get(AppleType.WITHER_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.PLAYER_HEAD_APPLE) == null ? 0 : applesConsumed.get(AppleType.PLAYER_HEAD_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.SUPER_GOLD_APPLE) == null ? 0 : applesConsumed.get(AppleType.SUPER_GOLD_APPLE)) + '\t' +
+                (applesConsumed.get(AppleType.TEAL_APPLE) == null ? 0 : applesConsumed.get(AppleType.TEAL_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.DIAMOND_APPLE) == null ? 0 : applesConsumed.get(AppleType.DIAMOND_APPLE)) + '\t' +
+                (applesConsumed.get(AppleType.TEAL_GOLD_APPLE) == null ? 0 : applesConsumed.get(AppleType.TEAL_GOLD_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.BLUE_GOLD_APPLE) == null ? 0 : applesConsumed.get(AppleType.BLUE_GOLD_APPLE)) + '\t' +
-                (applesConsumed.get(AppleType.ROYAL_APPLE) == null ? 0 : applesConsumed.get(AppleType.ROYAL_APPLE)) + '\t' +
-                (applesConsumed.get(AppleType.ALLOYED_APPLE) == null ? 0 : applesConsumed.get(AppleType.ALLOYED_APPLE)) + '\t' +
-                (applesConsumed.get(AppleType.MIDAS_APPLE) == null ? 0 : applesConsumed.get(AppleType.MIDAS_APPLE)) + '\t' +
-                (applesConsumed.get(AppleType.GOD_APPLE) == null ? 0 : applesConsumed.get(AppleType.GOD_APPLE)) + '\t' +
+                (applesConsumed.get(AppleType.KING_APPLE) == null ? 0 : applesConsumed.get(AppleType.KING_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.COLLECTOR_APPLE) == null ? 0 : applesConsumed.get(AppleType.COLLECTOR_APPLE)) + '\t' +
                 (applesConsumed.get(AppleType.ENCHANTED_GOLDEN_APPLE) == null ? 0 : applesConsumed.get(AppleType.ENCHANTED_GOLDEN_APPLE));
     }

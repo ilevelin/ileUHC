@@ -37,12 +37,11 @@ public class RecipesController {
         customItemsToLoad.add(CustomItemList.WITHER_APPLE);
         customItemsToLoad.add(CustomItemList.PLAYER_HEAD_APPLE);
         customItemsToLoad.add(CustomItemList.SUPER_GOLD_APPLE);
+        customItemsToLoad.add(CustomItemList.TEAL_APPLE);
         customItemsToLoad.add(CustomItemList.DIAMOND_APPLE);
+        customItemsToLoad.add(CustomItemList.TEAL_GOLD_APPLE);
         customItemsToLoad.add(CustomItemList.BLUE_GOLD_APPLE);
-        customItemsToLoad.add(CustomItemList.ROYAL_APPLE);
-        customItemsToLoad.add(CustomItemList.ALLOYED_APPLE);
-        customItemsToLoad.add(CustomItemList.MIDAS_APPLE);
-        customItemsToLoad.add(CustomItemList.GOD_APPLE);
+        customItemsToLoad.add(CustomItemList.KING_APPLE);
         customItemsToLoad.add(CustomItemList.COLLECTOR_APPLE);
 
         customItemsToLoad.add(CustomItemList.GLISTERING_MELON_SLICE);
