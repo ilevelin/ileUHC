@@ -10,14 +10,12 @@ public class UnkeyedRecipeShaped extends UnkeyedRecipe {
 
     private String[] shape = new String[]{"   ","   ","   "};
     private List<Pair<Character, Material>> ingredients = new ArrayList<>();
-    private String name = "";
 
     public UnkeyedRecipeShaped(String name) { this.name = name; }
 
     /* Getters */
     public String[] getShape() { return shape; }
     public List<Pair<Character, Material>> getIngredients() { return ingredients; }
-    public String getName() { return name; }
 
     /* "Setters" */
     public UnkeyedRecipeShaped setShape(String topRow, String midRow, String botRow) {
@@ -27,10 +25,6 @@ public class UnkeyedRecipeShaped extends UnkeyedRecipe {
     }
     public UnkeyedRecipeShaped addIngredient(char character, Material material) {
         ingredients.add(new Pair<>(character, material));
-        return this;
-    }
-    public UnkeyedRecipeShaped setName(String name){
-        this.name = name;
         return this;
     }
 }

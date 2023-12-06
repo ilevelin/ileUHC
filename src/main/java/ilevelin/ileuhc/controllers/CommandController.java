@@ -1,7 +1,9 @@
 package ilevelin.ileuhc.controllers;
 
+import ilevelin.ileuhc.config.PlayerConfigController;
 import ilevelin.ileuhc.utils.Messenger;
 import ilevelin.ileuhc.utils.enums.ChatColor;
+import ilevelin.ileuhc.utils.enums.LangCode;
 import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
 import ilevelin.ileuhc.utils.enums.TeamFormat;
 import org.bukkit.Bukkit;
@@ -26,6 +28,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
     *      gameTime <time>
     *      mapSize <size>
     *      deathmatchMapSize <size>
+    *      lang <language>
     */
 
     private void sendCommandOptions(CommandSender sender, Command command, String label, String[] args) {
@@ -33,31 +36,29 @@ public class CommandController implements CommandExecutor, TabCompleter {
     }
 
     private void sendCommandOptions(CommandSender sender, Command command, String label, String[] args,  boolean isError) {
-        ChatColor messageColor = isError ? ChatColor.RED : ChatColor.TEAL;
-
         String argsAsString = "";
         for (int i = 0; i < args.length; i++) {
             if (!isError || i != args.length - 1) argsAsString = argsAsString + " " + args[i];
         }
 
-        if (isError) Messenger.MessagePlayer(sender, new FormattedTextBlock("This command does not exist.").setColor(messageColor));
-        Messenger.MessagePlayer(sender, new FormattedTextBlock("Available options for \"/uhc"+argsAsString+"\" are:").setColor(messageColor));
+        if (isError) Messenger.MessagePlayerTranslated(sender, "Command.General.Error.DoesNotExist");
+        Messenger.MessagePlayerTranslated(sender, "Command.General.Info.AvailableOptions", argsAsString);
         onTabComplete(sender, command, label, args).forEach((option) -> {
-            Messenger.MessagePlayer(sender, new FormattedTextBlock(" - " + option).setColor(messageColor));
+            Messenger.MessagePlayer(sender, new FormattedTextBlock(" - " + option).setColor(ChatColor.TEAL));
         });
     }
 
     @Override
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-        if (!sender.isOp()) {
-            Messenger.MessagePlayer(sender, new FormattedTextBlock("Only server operators can run \"/uhc\" command.").setColor(ChatColor.RED));
+        if (!sender.isOp() && !args[0].equals("lang")) {
+            Messenger.MessagePlayerTranslated(sender, "Command.General.Error.NotAdmin");
             return true;
         }
         if (GameController.getInstance().isGameRunning()){
             if (args[0].equals("abort"))
                 GameController.getInstance().endGame("");
             else
-                Messenger.MessagePlayer(sender, new FormattedTextBlock("\"/uhc\" is disabled during gameplay. Only \"/uhc abort\" is allowed.").setColor(ChatColor.RED));
+                Messenger.MessagePlayerTranslated(sender, "Command.General.Error.GameRunning");
             return true;
         }
         if (args.length > 0){
@@ -69,19 +70,16 @@ public class CommandController implements CommandExecutor, TabCompleter {
                                 GameSetupController.getInstance().setTeamFormat(TeamFormat.SOLO);
                                 break;
                             case "premadeTeams":
-                                Messenger.MessagePlayer(sender, new FormattedTextBlock("This team format is not implemented yet.").setColor(ChatColor.YELLOW));
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.PREMADE_SQUAD);
-                                break;
+                                //break;
                             case "draftedTeams":
-                                Messenger.MessagePlayer(sender, new FormattedTextBlock("This team format is not implemented yet.").setColor(ChatColor.YELLOW));
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.DRAFTED_SQUAD);
-                                break;
+                                //break;
                             case "foundTeams":
-                                Messenger.MessagePlayer(sender, new FormattedTextBlock("This team format is not implemented yet.").setColor(ChatColor.YELLOW));
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.FOUND_SQUAD);
-                                break;
+                                //break;
                             case "randomTeams":
-                                Messenger.MessagePlayer(sender, new FormattedTextBlock("This team format is not implemented yet.").setColor(ChatColor.YELLOW));
+                                Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.TeamFormatNotImplemented");
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.RANDOM_SQUAD);
                                 break;
                             default:
@@ -96,18 +94,18 @@ public class CommandController implements CommandExecutor, TabCompleter {
                         switch (args[1]) {
                             case "add":
                                 if (Bukkit.getServer().getPlayer(args[2]) == null) {
-                                    Messenger.MessagePlayer(sender, new FormattedTextBlock("The player \""+args[2]+"\" is not connected to the server.").setColor(ChatColor.RED));
+                                    Messenger.MessagePlayerTranslated(sender, "Command.Participants.Error.NotConnected", args[2]);
                                 } else if (GameSetupController.getInstance().addParticipant(args[2])) {
-                                    Messenger.MessagePlayer(sender, new FormattedTextBlock("Player \""+args[2]+"\" added as participant.").setColor(ChatColor.GREEN));
+                                    Messenger.MessagePlayerTranslated(sender, "Command.Participants.Info.ParticipantAdded", args[2]);
                                 } else {
-                                    Messenger.MessagePlayer(sender, new FormattedTextBlock("Player \""+args[2]+"\" was already added as participant.").setColor(ChatColor.YELLOW));
+                                    Messenger.MessagePlayerTranslated(sender, "Command.Participants.Error.AlreadyParticipating", args[2]);
                                 }
                                 return true;
                             case "remove":
                                 if (GameSetupController.getInstance().removeParticipant(args[2])) {
-                                    Messenger.MessagePlayer(sender, new FormattedTextBlock("Player \""+args[2]+"\" removed as participant.").setColor(ChatColor.GREEN));
+                                    Messenger.MessagePlayerTranslated(sender, "Command.Participants.Info.ParticipantRemoved", args[2]);
                                 } else {
-                                    Messenger.MessagePlayer(sender, new FormattedTextBlock("Player \""+args[2]+"\" was not a participant.").setColor(ChatColor.YELLOW));
+                                    Messenger.MessagePlayerTranslated(sender, "Command.Participants.Error.NotAParticipant", args[2]);
                                 }
                                 return true;
 
@@ -118,7 +116,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
                         switch (args[1]) {
                             case "add":
                             case "remove":
-                                Messenger.MessagePlayer(sender, new FormattedTextBlock("You must specify the name of a player.").setColor(ChatColor.RED));
+                                Messenger.MessagePlayerTranslated(sender, "Command.Participants.Error.NoParticipantIndicated");
                                 return true;
                             default:
                                 sendCommandOptions(sender, command, label, args, true);
@@ -131,66 +129,86 @@ public class CommandController implements CommandExecutor, TabCompleter {
                 case "start":
                     switch (GameController.getInstance().prepareGame()) {
                         case NOT_ENOUGH_PLAYERS:
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Not enough players to start the game.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.NotEnoughPlayers");
                             break;
                         case PLAYERS_NOT_CONNECTED:
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("All players must be connected to the server to start the game.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.PlayersNotConnected");
                             break;
                         case NOT_ENOUGH_VALID_SPAWNS:
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("The map doesn't have enough valid spawns for all the players/teams.").setColor(ChatColor.RED));
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Try modifying the map size or generating a new world with a new seed.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.NotEnoughSpawns");
                             break;
                         case UNKERR:
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("An unknown error has occurred while trying to start the game. Check the server console for more details.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.Unknown");
                             break;
                     }
                     return true;
                 case "abort":
-                    Messenger.MessagePlayer(sender, new FormattedTextBlock("Game is not running").setColor(ChatColor.RED));
+                    Messenger.MessagePlayerTranslated(sender, "Command.Abort.Error.NotRunning");
                     return true;
                 case "treatyTime":
                     if (args.length > 1) {
                         try {
                             GameSetupController.getInstance().setTreatyTime(Integer.parseInt(args[1]));
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Set time to "+GameSetupController.getInstance().getFormattedTreatyTime()).setColor(ChatColor.GREEN));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "treatyTime", GameSetupController.getInstance().getFormattedTreatyTime());
                         } catch (Exception e) {
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("\""+args[1]+"\" is not a valid number.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NotANumber", args[1]);
                         }
                     } else
-                        Messenger.MessagePlayer(sender, new FormattedTextBlock("Please specify a number of seconds.").setColor(ChatColor.RED));
+                        Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NoNumberSpecified.Seconds");
                     return true;
                 case "gameTime":
                     if (args.length > 1) {
                         try {
                             GameSetupController.getInstance().setTimeLimit(Integer.parseInt(args[1]));
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Set time to "+GameSetupController.getInstance().getFormattedTimeLimit()).setColor(ChatColor.GREEN));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "gameTime", GameSetupController.getInstance().getFormattedTimeLimit());
                         } catch (Exception e) {
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("\""+args[1]+"\" is not a valid number.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NotANumber", args[1]);
                         }
                     } else
-                        Messenger.MessagePlayer(sender, new FormattedTextBlock("Please specify a number of seconds.").setColor(ChatColor.RED));
+                        Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NoNumberSpecified.Seconds");
                     return true;
                 case "mapSize":
                     if (args.length > 1) {
                         try {
                             GameSetupController.getInstance().setMapSize(Integer.parseInt(args[1]));
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Set map size to "+GameSetupController.getInstance().getMapSize()).setColor(ChatColor.GREEN));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "mapSize", ""+GameSetupController.getInstance().getMapSize());
                         } catch (Exception e) {
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("\""+args[1]+"\" is not a valid number.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NotANumber", args[1]);
                         }
                     } else
-                        Messenger.MessagePlayer(sender, new FormattedTextBlock("Please specify a number of blocks.").setColor(ChatColor.RED));
+                        Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NoNumberSpecified.Blocks");
                     return true;
                 case "deathmatchMapSize":
                     if (args.length > 1) {
                         try {
                             GameSetupController.getInstance().setDeathmatchMapSize(Integer.parseInt(args[1]));
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("Set deathmatch map size to "+GameSetupController.getInstance().getMapSize()).setColor(ChatColor.GREEN));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "deathmatchMapSize", ""+GameSetupController.getInstance().getMapSize());
                         } catch (Exception e) {
-                            Messenger.MessagePlayer(sender, new FormattedTextBlock("\""+args[1]+"\" is not a valid number.").setColor(ChatColor.RED));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NotANumber", args[1]);
                         }
                     } else
-                        Messenger.MessagePlayer(sender, new FormattedTextBlock("Please specify a number of blocks.").setColor(ChatColor.RED));
+                        Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NoNumberSpecified.Blocks");
+                    return true;
+                case "lang":
+                    if (args.length > 1) {
+                        switch (args[1]) {
+                            case "en":
+                                PlayerConfigController.getInstance().getPlayerConfig(sender.getName()).setLang(LangCode.EN);
+                                break;
+                            case "es":
+                                PlayerConfigController.getInstance().getPlayerConfig(sender.getName()).setLang(LangCode.ES);
+                                break;
+                            case "ca":
+                                PlayerConfigController.getInstance().getPlayerConfig(sender.getName()).setLang(LangCode.CA);
+                                break;
+                            default:
+                                sendCommandOptions(sender, command, label, args, true);
+                                break;
+                        }
+                        Messenger.MessagePlayerTranslated(sender, "Command.Lang.Info.LangChanged");
+                    } else {
+
+                    }
                     return true;
                 default:
                     sendCommandOptions(sender, command, label, args, true);
@@ -215,8 +233,8 @@ public class CommandController implements CommandExecutor, TabCompleter {
                         options.add("draftedTeams");
                         options.add("foundTeams");
                         options.add("randomTeams");
-                        break;
                     }
+                    break;
                 case "participants":
                     if (args.length > 2) {
                         Bukkit.getServer().getOnlinePlayers().forEach((player) -> options.add(player.getDisplayName()));
@@ -225,8 +243,13 @@ public class CommandController implements CommandExecutor, TabCompleter {
                         options.add("remove");
                     }
                     break;
-                case "help":
-                    // Nothing
+                case "lang":
+                    if (args.length == 2) {
+                        options.add("en");
+                        options.add("es");
+                        options.add("ca");
+                    }
+                    break;
                 default:
                     break;
             }
@@ -238,6 +261,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
             options.add("gameTime");
             options.add("mapSize");
             options.add("deathmatchMapSize");
+            options.add("lang");
         }
 
         return options;

@@ -200,7 +200,7 @@ public class EventsController implements Listener {
                 break;
             case NETHER_PORTAL:
                 if (GameController.getInstance().getTimeRemaining() == 0) {
-                    Messenger.MessagePlayer(event.getPlayer(), new FormattedTextBlock("Nether is disabled!").setColor(ChatColor.ORANGE));
+                    Messenger.MessagePlayerTranslated(event.getPlayer(), "Events.Portal.Error.NetherDisabled");
                     event.getPlayer().playSound(event.getPlayer(), Sound.ENTITY_SILVERFISH_DEATH, 0.5f, 0.5f);
                     event.setCancelled(true);
                 }

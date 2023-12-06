@@ -1,5 +1,6 @@
 package ilevelin.ileuhc;
 
+import ilevelin.ileuhc.config.PlayerConfig;
 import ilevelin.ileuhc.controllers.*;
 import ilevelin.ileuhc.utils.Messenger;
 import ilevelin.ileuhc.utils.customItem.CustomItemBuilder;
@@ -39,6 +40,12 @@ public final class Main extends JavaPlugin {
 
         Messenger.ConsoleLog("Running first scoreboard update to have it appear on startup...");
         GameSetupController.getInstance().setPluginVersion(getDescription().getVersion());
+
+        Messenger.ConsoleLog("Creating and configurating plugin folder...");
+        this.getDataFolder().mkdirs();
+        String dataPath = this.getDataFolder().getAbsolutePath();
+        PlayerConfig.setConfigFolder(dataPath);
+        StatsController.setConfigFolder(dataPath);
 
         Messenger.ConsoleLog("");
         Messenger.ConsoleLog("Plugin initialization completed!");

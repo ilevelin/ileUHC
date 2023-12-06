@@ -262,7 +262,7 @@ public class GameController {
 
                 if (treatyTimeRemaining == 0 && !treatyTimeEnded) {
                     for (Player player : Bukkit.getServer().getOnlinePlayers()) player.playSound(player, Sound.ENTITY_ENDERMAN_SCREAM, 0.25f, 1f);
-                    Messenger.MessageBroadcast(false, new FormattedTextBlock("Treaty time has ended! PvP is now enabled!").setColor(ChatColor.TEAL));
+                    Messenger.MessageBroadcastTranslated(false, "Game.Info.TreatyEnded");
                     treatyTimeEnded = true;
                     Bukkit.getServer().getWorlds().forEach((world) -> world.setPVP(true));
                 }
@@ -270,8 +270,7 @@ public class GameController {
                 if (timeRemaining == 600) {
                     for (Player player : Bukkit.getServer().getOnlinePlayers())
                         player.playSound(player, Sound.BLOCK_ANVIL_USE, 0.5f, 1f);
-                    Messenger.MessageBroadcast(false, new FormattedTextBlock("Game will end in 10 minutes!").setColor(ChatColor.TEAL));
-                    Messenger.MessageBroadcast(false, new FormattedTextBlock("Players that remain in the nether once the time ends will be teleported to their relative positions on the overworld with a 2 heart damage penalty.").setColor(ChatColor.TEAL));
+                    Messenger.MessageBroadcastTranslated(false, "Game.Info.10MinutesRemain");
                 }
 
                 if (timeRemaining == 0 && !timeLimitEnded) {
@@ -290,8 +289,7 @@ public class GameController {
 
                     overworld.getWorldBorder().setSize(GameSetupController.getInstance().getDeathmatchMapSize(), 600L);
 
-                    Messenger.MessageBroadcast(false, new FormattedTextBlock("Game time has ended! The world will slowly shrink for the next 10 minutes until all players meet at the world center.").setColor(ChatColor.TEAL));
-                    Messenger.MessageBroadcast(false, new FormattedTextBlock("Players that are on the nether have been teleported to their relative positions on the overworld with a 2 heart damage penalty.").setColor(ChatColor.TEAL));
+                    Messenger.MessageBroadcastTranslated(false, "Game.Info.GameEnded");
                     timeLimitEnded = true;
                 }
             }
@@ -299,7 +297,7 @@ public class GameController {
 
         StatsController.getInstance().initialize(alivePlayers);
 
-        Messenger.MessageBroadcast(false, new FormattedTextBlock("GAME STARTS")); // debug, beautify later
+        Messenger.MessageBroadcastTranslated(false, "Game.Info.GameStarts"); // debug, beautify later
     }
 
     public void killPlayer(Player player) { killPlayer(player.getDisplayName()); }
@@ -312,9 +310,7 @@ public class GameController {
                 break;
             }
 
-        Messenger.MessageBroadcast(false,
-                new FormattedTextBlock().setText(player).setColor(ChatColor.RED).setFormatterBlock(new TextFormatterBlock().setBold(true)),
-                new FormattedTextBlock().setText("has been eliminated!").setColor(ChatColor.DARK_RED));
+        Messenger.MessageBroadcastTranslated(false,"Game.Info.PlayerEliminated", player);
 
         for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
             onlinePlayer.playSound(onlinePlayer, Sound.ITEM_TRIDENT_THUNDER, 1f, 1.5f);
@@ -329,36 +325,32 @@ public class GameController {
     public void endGame(String winner) {
         if (!gameRunning) return;
         if (winner.equals(""))
-            Messenger.MessageBroadcast(false, new FormattedTextBlock("Game aborted by an administrator").setColor(ChatColor.RED));
+            Messenger.MessageBroadcastTranslated(false, "Game.Info.GameAborted");
         else {
             Player winnerPlayer = Bukkit.getServer().getPlayer(winner);
             StatsController.getInstance().setPlace(winner, 1, alivePlayers.size()+deadPlayers.size());
 
-            Messenger.MessageBroadcast(false,
-                    new FormattedTextBlock(winner).setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true)),
-                    new FormattedTextBlock("is the winner!").setColor(ChatColor.DARK_GREEN));
+            Messenger.MessageBroadcastTranslated(false,"Game.Info.WinnerPlayer", winner);
 
             for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
                 if (onlinePlayer.getDisplayName().equals(winner)) {
-                    onlinePlayer.sendTitle(
-                            new FormattedTextBlock("YOU WIN")
-                                    .setColor(ChatColor.GREEN)
-                                    .setFormatterBlock(new TextFormatterBlock().setBold(true))
-                                    .toStringWithoutResetEnd(),
-                            new FormattedTextBlock("Congratulations!")
-                                    .setColor(ChatColor.GREEN)
-                                    .toStringWithoutResetEnd(),
-                            0, 40, 400);
+                    Messenger.SendTitleTranslated(
+                            onlinePlayer,
+                            "Game.Info.YouWinTitle.Main",
+                            new String[]{},
+                            "Game.Info.YouWinTitle.Secondary",
+                            new String[]{},
+                            0, 40, 400
+                            );
                 } else {
-                    onlinePlayer.sendTitle(
-                            new FormattedTextBlock(winner)
-                                    .setColor(ChatColor.YELLOW)
-                                    .setFormatterBlock(new TextFormatterBlock().setBold(true))
-                                    .toStringWithoutResetEnd(),
-                            new FormattedTextBlock("is the winner!")
-                                    .setColor(ChatColor.RED)
-                                    .toStringWithoutResetEnd(),
-                            0, 40, 400);
+                    Messenger.SendTitleTranslated(
+                            onlinePlayer,
+                            "Game.Info.WinnerPlayerTitle.Main",
+                            new String[]{winner},
+                            "Game.Info.WinnerPlayerTitle.Secondary",
+                            new String[]{},
+                            0, 40, 400
+                    );
                 }
                 onlinePlayer.playSound(
                         winnerPlayer,

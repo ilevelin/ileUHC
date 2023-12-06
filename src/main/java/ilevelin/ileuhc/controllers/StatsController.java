@@ -1,12 +1,9 @@
 package ilevelin.ileuhc.controllers;
 
-import com.google.common.math.Stats;
 import ilevelin.ileuhc.utils.Messenger;
 import ilevelin.ileuhc.utils.enums.AppleType;
-import ilevelin.ileuhc.utils.enums.ChatColor;
 import ilevelin.ileuhc.utils.enums.DeathSource;
 import ilevelin.ileuhc.utils.gameStats.PlayerStats;
-import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -18,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StatsController {
+
+    private static String configFolder = "";
+    public static void setConfigFolder(String folder) { configFolder = folder; }
 
     private static StatsController instance = null;
     public static StatsController getInstance() {
@@ -54,8 +54,8 @@ public class StatsController {
     public void writeStatsToFile() {
         String dateAsString = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
         try {
-            Files.createDirectories(Paths.get("./plugins/ileUHC/gameHistory/"));
-            File file = new File("./plugins/ileUHC/gameHistory/"+dateAsString+".txt");
+            Files.createDirectories(Paths.get(configFolder+"/gameHistory/"));
+            File file = new File(configFolder+"/gameHistory/"+dateAsString+".txt");
             FileWriter statsFile = new FileWriter(file);
 
             statsFile.write("## Game Stats - Paste into an empty line in \"GameHistory\"\n");
@@ -67,7 +67,7 @@ public class StatsController {
             statsFile.close();
             Messenger.ConsoleLog("Stats successfully printed.");
         } catch (Exception e) {
-            Messenger.MessageBroadcast(true, new FormattedTextBlock("An error occurred while trying to create the stats file. Check the server console for more details.").setColor(ChatColor.RED));
+            Messenger.MessageBroadcastTranslated(true, "Stats.Error.CouldNotSave");
             Messenger.ConsoleLog(e.toString());
         }
     }
