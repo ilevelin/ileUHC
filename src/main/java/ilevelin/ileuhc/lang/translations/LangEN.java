@@ -67,6 +67,10 @@ public class LangEN implements Lang {
                 new FormattedTextBlock("Please specify a number of blocks.")
                         .setColor(ChatColor.RED).toString()
         );
+        translations.put("Command.Configuration.Error.NoNumberSpecified.Players",
+                new FormattedTextBlock("Please specify a number of players.")
+                        .setColor(ChatColor.RED).toString()
+        );
 
         translations.put("Command.Configuration.Info.OptionSet",
                 new FormattedTextBlock("Set $0 to $1")

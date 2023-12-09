@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
+
 public class Messenger {
 
     private static final String
@@ -58,7 +60,7 @@ public class Messenger {
     public static void MessagePlayerTranslated (CommandSender player, String messageID, String... replacements) {
         LangCode lang = PlayerConfigController.getInstance().getPlayerConfig(player.getName()).getLang();
         StringBuilder auxMessage = new StringBuilder(CHAT_PREFIX);
-        auxMessage.append(Translator.getInstance().getTranslation(messageID, lang));
+        auxMessage.append(Translator.getInstance().getTranslation(messageID, lang, Arrays.stream(replacements).toArray(String[]::new)));
         final String finalMessage = auxMessage.toString();
         player.sendMessage(finalMessage);
     }

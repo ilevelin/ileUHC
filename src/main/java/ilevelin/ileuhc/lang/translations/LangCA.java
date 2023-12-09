@@ -64,7 +64,11 @@ public class LangCA implements Lang {
                         .setColor(ChatColor.RED).toString()
         );
         translations.put("Command.Configuration.Error.NoNumberSpecified.Blocks",
-                new FormattedTextBlock("Por favor, especifica un número de blocs.")
+                new FormattedTextBlock("Per favor, especifica un número de blocs.")
+                        .setColor(ChatColor.RED).toString()
+        );
+        translations.put("Command.Configuration.Error.NoNumberSpecified.Players",
+                new FormattedTextBlock("Per favor, especifica un número de jugadors.")
                         .setColor(ChatColor.RED).toString()
         );
 

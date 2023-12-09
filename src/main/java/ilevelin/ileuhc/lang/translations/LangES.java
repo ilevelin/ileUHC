@@ -67,6 +67,10 @@ public class LangES implements Lang {
                 new FormattedTextBlock("Por favor, especifica un número de bloques.")
                         .setColor(ChatColor.RED).toString()
         );
+        translations.put("Command.Configuration.Error.NoNumberSpecified.Players",
+                new FormattedTextBlock("Por favor, especifica un número de jugadores.")
+                        .setColor(ChatColor.RED).toString()
+        );
 
         translations.put("Command.Configuration.Info.OptionSet",
                 new FormattedTextBlock("Ajustado $0 a $1")

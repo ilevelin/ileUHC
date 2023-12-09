@@ -1,5 +1,6 @@
 package ilevelin.ileuhc.config;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerConfigController {
@@ -10,7 +11,7 @@ public class PlayerConfigController {
         return instance;
     }
 
-    private PlayerConfigController(){}
+    private PlayerConfigController() { loadedConfigs = new HashMap<>(); }
 
     private Map<String, PlayerConfig> loadedConfigs;
 

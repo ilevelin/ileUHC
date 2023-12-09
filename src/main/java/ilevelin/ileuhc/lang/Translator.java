@@ -30,7 +30,7 @@ public class Translator {
         String translatedString = langFile.getTranslation(stringCode);
 
         for (int i = 0; i < replacements.length; i++)
-            translatedString.replaceAll("\\$"+i, replacements[i]);
+            translatedString = translatedString.replaceAll("\\$" + i, replacements[i]);
 
         return translatedString;
     }

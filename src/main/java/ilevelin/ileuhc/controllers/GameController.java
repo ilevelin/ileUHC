@@ -27,6 +27,7 @@ public class GameController {
         return instance;
     }
     private GameController() {
+        teamColors = new ArrayList<>();
         teamColors.add(org.bukkit.ChatColor.DARK_BLUE);
         teamColors.add(org.bukkit.ChatColor.DARK_GREEN);
         teamColors.add(org.bukkit.ChatColor.DARK_AQUA);

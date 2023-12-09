@@ -23,25 +23,23 @@ public final class Main extends JavaPlugin {
         this.getCommand("uhc").setExecutor(new CommandController());
         this.getCommand("uhc").setTabCompleter(new CommandController());
 
-        Messenger.ConsoleLog("Initializing scoreboard controller...");
-        try {
-            Bukkit.getServer().getScoreboardManager().getMainScoreboard().getObjective("ileUHC_Objective").unregister();
-        } catch (Exception e) { }
-        ScoreboardController.getInstance().enable(this);
-
         Messenger.ConsoleLog("Initializing custom item builder...");
         CustomItemBuilder.getInstance().includePlugin(this);
-
-        Messenger.ConsoleLog("Initializing recipes controller...");
-        RecipesController.getInstance().includePlugin(this);
-
-        Messenger.ConsoleLog("Initializing game controller...");
-        GameController.getInstance().includePlugin(this);
 
         Messenger.ConsoleLog("Enabling custom items and recipes...");
         RecipesController.getInstance().enable();
 
-        Messenger.ConsoleLog("Registering event controller...");
+        Messenger.ConsoleLog("Initializing controllers...");
+        Messenger.ConsoleLog("> Scoreboard controller...");
+        try {
+            Bukkit.getServer().getScoreboardManager().getMainScoreboard().getObjective("ileUHC_Objective").unregister();
+        } catch (Exception e) { }
+        ScoreboardController.getInstance().enable(this);
+        Messenger.ConsoleLog("> Recipes controller...");
+        RecipesController.getInstance().includePlugin(this);
+        Messenger.ConsoleLog("> Game controller...");
+        GameController.getInstance().includePlugin(this);
+        Messenger.ConsoleLog("> Event controller...");
         getServer().getPluginManager().registerEvents(new EventsController(), this);
 
         Messenger.ConsoleLog("Running first scoreboard update to have it appear on startup...");

@@ -21,7 +21,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
     * Commands
     * *********************
     * /uhc <command>
-    *      setTeamFormat <TeamFormat>
+    *      teamFormat <TeamFormat>
     *      participants [add/remove] <PlayerName>
     *      start
     *      treatyTime <time>
@@ -63,11 +63,12 @@ public class CommandController implements CommandExecutor, TabCompleter {
         }
         if (args.length > 0){
             switch (args[0]) {
-                case "setTeamFormat":
+                case "teamFormat":
                     if (args.length > 1) {
                         switch (args[1]) {
                             case "solo":
                                 GameSetupController.getInstance().setTeamFormat(TeamFormat.SOLO);
+                                Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "teamFormat", "Solo");
                                 break;
                             case "premadeTeams":
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.PREMADE_SQUAD);
@@ -81,6 +82,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
                                 break;
                             case "randomTeams":
                                 GameSetupController.getInstance().setTeamFormat(TeamFormat.RANDOM_SQUAD);
+                                Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "teamFormat", "RandomTeams");
                                 break;
                             default:
                                 sendCommandOptions(sender, command, label, args, true);
@@ -88,6 +90,17 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     } else {
                         sendCommandOptions(sender, command, label, args);
                     }
+                    return true;
+                case "teamSize":
+                    if (args.length > 1) {
+                        try {
+                            GameSetupController.getInstance().setTeamSize(Integer.parseInt(args[1]));
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Info.OptionSet", "teamSize", GameSetupController.getInstance().getTeamSize()+"");
+                        } catch (Exception e) {
+                            Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NotANumber", args[1]);
+                        }
+                    } else
+                        Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.NoNumberSpecified.Players");
                     return true;
                 case "participants":
                     if (args.length > 2) {
@@ -229,7 +242,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
 
         if (args.length > 1) {
             switch (args[0]) {
-                case "setTeamFormat":
+                case "teamFormat":
                     if (args.length == 2) {
                         options.add("solo");
                         options.add("premadeTeams");
@@ -257,7 +270,7 @@ public class CommandController implements CommandExecutor, TabCompleter {
                     break;
             }
         } else {
-            options.add("setTeamFormat");
+            options.add("teamFormat");
             options.add("participants");
             options.add("start");
             options.add("treatyTime");
