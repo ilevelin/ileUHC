@@ -4,6 +4,7 @@ C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\controllers\EventsController.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\Main.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\AppleType.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\lang\translations\Lang.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\DeathSource.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\Pair.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\recipes\UnkeyedRecipeShapeless.java
@@ -15,8 +16,13 @@ C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\ChatFormatter.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\controllers\RecipesController.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\customItem\CustomItemBuilder.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\lang\translations\LangES.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\Messenger.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\LangCode.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\controllers\TeamsController.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\customItem\CustomItem.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\lang\translations\LangEN.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\NumberFormatter.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\recipes\UnkeyedRecipeShaped.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\textFormatting\TextFormatterBlock.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\controllers\GameSetupController.java
@@ -24,5 +30,9 @@ C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\CustomItemTier.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\controllers\GameController.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\enums\TeamFormat.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\lang\Translator.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\recipes\UnkeyedRecipe.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\lang\translations\LangCA.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\config\PlayerConfig.java
+C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\config\PlayerConfigController.java
 C:\Users\jmgpi\Documents\IntelliJ Projects\ileUHC\src\main\java\ilevelin\ileuhc\utils\gameStats\PlayerStats.java
