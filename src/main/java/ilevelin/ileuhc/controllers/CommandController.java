@@ -77,10 +77,10 @@ public class CommandController implements CommandExecutor, TabCompleter {
                                 //break;
                             case "foundTeams":
                                 //GameSetupController.getInstance().setTeamFormat(TeamFormat.FOUND_SQUAD);
-                                //break;
-                            case "randomTeams":
                                 Messenger.MessagePlayerTranslated(sender, "Command.Configuration.Error.TeamFormatNotImplemented");
-                                //GameSetupController.getInstance().setTeamFormat(TeamFormat.RANDOM_SQUAD);
+                                break;
+                            case "randomTeams":
+                                GameSetupController.getInstance().setTeamFormat(TeamFormat.RANDOM_SQUAD);
                                 break;
                             default:
                                 sendCommandOptions(sender, command, label, args, true);
@@ -136,6 +136,9 @@ public class CommandController implements CommandExecutor, TabCompleter {
                             break;
                         case NOT_ENOUGH_VALID_SPAWNS:
                             Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.NotEnoughSpawns");
+                            break;
+                        case UNEVEN_TEAM_SIZES:
+                            Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.UnevenTeams");
                             break;
                         case UNKERR:
                             Messenger.MessagePlayerTranslated(sender, "Command.Start.Error.Unknown");

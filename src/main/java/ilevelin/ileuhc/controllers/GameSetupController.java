@@ -31,6 +31,7 @@ public class GameSetupController {
     private List<String> participatingPlayers = new ArrayList<>();
     private TeamFormat teamFormat;
     private long timeLimit, treatyTime, mapSize, deathmatchMapSize;
+    private int teamSize;
 
     public GameSetupController setTeamFormat(TeamFormat teamFormat) { this.teamFormat = teamFormat; this.updateScoreboard(); return this; }
     public TeamFormat getTeamFormat() { return this.teamFormat; }
@@ -73,6 +74,9 @@ public class GameSetupController {
     public GameSetupController setDeathmatchMapSize(long deathmatchMapSize) { this.deathmatchMapSize = deathmatchMapSize; this.updateScoreboard(); return this; }
     public long getDeathmatchMapSize() { return deathmatchMapSize; }
 
+    public GameSetupController setTeamSize(int teamSize) { this.teamSize = teamSize; this.updateScoreboard(); return this; }
+    public int getTeamSize() { return teamSize; }
+
 
     public void updateScoreboard(){
         List<String> scoreboardContent = new ArrayList<>();
@@ -96,6 +100,8 @@ public class GameSetupController {
                 break;
         }
 
+        if (teamFormat != TeamFormat.SOLO)
+            scoreboardContent.add(new FormattedTextBlock().setText("TeamSize>").setColor(ChatColor.TEAL).toString() + getTeamSize());
         scoreboardContent.add(new FormattedTextBlock().setText("GameTime>").setColor(ChatColor.TEAL).toString() + getFormattedTimeLimit());
         scoreboardContent.add(new FormattedTextBlock().setText("TreatyTime>").setColor(ChatColor.TEAL).toString() + getFormattedTreatyTime());
         scoreboardContent.add(new FormattedTextBlock().setText("MapSize>").setColor(ChatColor.TEAL).toString() + getMapSize());

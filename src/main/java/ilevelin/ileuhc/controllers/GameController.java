@@ -4,6 +4,7 @@ import ilevelin.ileuhc.utils.Messenger;
 import ilevelin.ileuhc.utils.NumberFormatter;
 import ilevelin.ileuhc.utils.enums.ChatColor;
 import ilevelin.ileuhc.utils.enums.GameStartCode;
+import ilevelin.ileuhc.utils.enums.TeamFormat;
 import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
 import ilevelin.ileuhc.utils.textFormatting.TextFormatterBlock;
 import org.bukkit.*;
@@ -25,7 +26,20 @@ public class GameController {
         if (instance == null) instance = new GameController();
         return instance;
     }
-    private GameController() { }
+    private GameController() {
+        teamColors.add(org.bukkit.ChatColor.DARK_BLUE);
+        teamColors.add(org.bukkit.ChatColor.DARK_GREEN);
+        teamColors.add(org.bukkit.ChatColor.DARK_AQUA);
+        teamColors.add(org.bukkit.ChatColor.DARK_RED);
+        teamColors.add(org.bukkit.ChatColor.DARK_PURPLE);
+        teamColors.add(org.bukkit.ChatColor.GOLD);
+        teamColors.add(org.bukkit.ChatColor.BLUE);
+        teamColors.add(org.bukkit.ChatColor.GREEN);
+        teamColors.add(org.bukkit.ChatColor.AQUA);
+        teamColors.add(org.bukkit.ChatColor.RED);
+        teamColors.add(org.bukkit.ChatColor.LIGHT_PURPLE);
+        teamColors.add(org.bukkit.ChatColor.YELLOW);
+    }
 
     private JavaPlugin plugin;
     private boolean gameRunning = false;
@@ -34,6 +48,10 @@ public class GameController {
     private long timeRemaining = 0, treatyTimeRemaining = 0, gameTime = 0;
     private boolean timeLimitEnded = false, treatyTimeEnded = false;
     private BukkitScheduler updater;
+
+    private List<org.bukkit.ChatColor> teamColors;
+    
+    GameSetupController gameSetupController = GameSetupController.getInstance();
 
     public GameController includePlugin(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -46,13 +64,20 @@ public class GameController {
     public GameStartCode prepareGame() {
         /* Checking some safeguards before starting */
         // At least 2 players
-        if (GameSetupController.getInstance().getParticipatingPlayers().size() < 2)
+        if (gameSetupController.getParticipatingPlayers().size() < 2)
             return GameStartCode.NOT_ENOUGH_PLAYERS;
 
         // All participants must be connected
-        for (String participant : GameSetupController.getInstance().getParticipatingPlayers()) {
+        for (String participant : gameSetupController.getParticipatingPlayers()) {
             if(Bukkit.getServer().getPlayer(participant) == null)
                 return GameStartCode.PLAYERS_NOT_CONNECTED;
+        }
+
+        if (
+                gameSetupController.getTeamFormat() != TeamFormat.SOLO
+                && gameSetupController.getParticipatingPlayers().size() % gameSetupController.getTeamSize() != 0
+        ) {
+            return GameStartCode.UNEVEN_TEAM_SIZES;
         }
 
         try {
@@ -64,20 +89,32 @@ public class GameController {
             final World overworld = auxWorld;
 
             /* Team setup */
-            switch (GameSetupController.getInstance().getTeamFormat()) {
+            switch (gameSetupController.getTeamFormat()) {
                 case SOLO:
                 case FOUND_SQUAD:
                     // Nothing to do
                     break;
+                case RANDOM_SQUAD:
+                    TeamsController.getInstance().generateRandomTeams(
+                            gameSetupController.getTeamSize(),
+                            gameSetupController.getParticipatingPlayers()
+                    );
+                    Collections.shuffle(teamColors);
+                    for (int i = 0; i < TeamsController.getInstance().getTeamList().size(); i++) {
+                        org.bukkit.scoreboard.Team newTeam = Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam(TeamsController.getInstance().getTeamList().get(i).teamName);
+                        newTeam.setColor(teamColors.get(i));
+                        newTeam.setAllowFriendlyFire(true);
+                        TeamsController.getInstance().getTeamList().get(i).players.forEach(player -> newTeam.addEntry(player));
+                    }
+                    break;
                 case PREMADE_SQUAD:
                 case DRAFTED_SQUAD:
-                case RANDOM_SQUAD:
                     // Not implemented yet
                     break;
             }
 
             /* Preparing world */
-            overworld.getWorldBorder().setSize(GameSetupController.getInstance().getMapSize() + 1);
+            overworld.getWorldBorder().setSize(gameSetupController.getMapSize() + 1);
             Bukkit.getServer().getWorlds().forEach((world) -> world.setPVP(false));
 
             /* Sending all players to Spectator */
@@ -88,9 +125,9 @@ public class GameController {
 
             /* Setting up spawn positions */
             List<Location> spawnPositions = new ArrayList<>();
-            int spawnsPerSide = (int) (Math.floorDiv(GameSetupController.getInstance().getMapSize(), 300L)) + 1;
-            long coordinateIncrement = GameSetupController.getInstance().getMapSize() / spawnsPerSide;
-            long borderCoordinate = GameSetupController.getInstance().getMapSize() / 2L;
+            int spawnsPerSide = (int) (Math.floorDiv(gameSetupController.getMapSize(), 300L)) + 1;
+            long coordinateIncrement = gameSetupController.getMapSize() / spawnsPerSide;
+            long borderCoordinate = gameSetupController.getMapSize() / 2L;
             // X+
             for (int i = 0; i < spawnsPerSide; i++)
                 spawnPositions.add(new Location(overworld,
@@ -122,10 +159,10 @@ public class GameController {
             Collections.shuffle(spawnPositions);
 
             /* Teleporting players */
-            switch (GameSetupController.getInstance().getTeamFormat()) {
+            switch (gameSetupController.getTeamFormat()) {
                 case SOLO:
                 case FOUND_SQUAD:
-                    for (String participantName : GameSetupController.getInstance().getParticipatingPlayers()) {
+                    for (String participantName : gameSetupController.getParticipatingPlayers()) {
                         Player participant = Bukkit.getPlayer(participantName);
                         boolean validSpawn = false;
                         while (!validSpawn) {
@@ -145,9 +182,34 @@ public class GameController {
                         }
                     }
                     break;
+                case RANDOM_SQUAD:
+                    for (Team team : TeamsController.getInstance().getTeamList()) {
+                        List<Player> teamPlayers = new ArrayList<>();
+                        team.players.forEach(playerName -> teamPlayers.add(Bukkit.getPlayer(playerName)));
+                        boolean validSpawn = false;
+                        while (!validSpawn) {
+                            Location spawnLocation = spawnPositions.remove(0);
+                            teamPlayers.get(0).teleport(spawnLocation);
+                            if (!overworld.getBlockAt(
+                                            teamPlayers.get(0).getLocation().getBlockX(),
+                                            overworld.getHighestBlockYAt(teamPlayers.get(0).getLocation()),
+                                            teamPlayers.get(0).getLocation().getBlockZ())
+                                    .getType().equals(Material.WATER)
+                            ) {
+                                for (Player participant : teamPlayers) {
+                                    participant.teleport(spawnLocation);
+                                    participant.getInventory().addItem(new ItemStack(Material.OAK_BOAT));
+                                    participant.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 60 * 20, 10));
+                                    participant.setGameMode(GameMode.SURVIVAL);
+                                }
+                                validSpawn = true;
+                            } else if (spawnPositions.size() == 0)
+                                return GameStartCode.NOT_ENOUGH_VALID_SPAWNS;
+                        }
+                    }
+                    break;
                 case PREMADE_SQUAD:
                 case DRAFTED_SQUAD:
-                case RANDOM_SQUAD:
                     // Not implemented yet
                     break;
             }
@@ -238,8 +300,8 @@ public class GameController {
         }
         final World overworld = auxWorld;
 
-        this.treatyTimeRemaining = GameSetupController.getInstance().getTreatyTime();
-        this.timeRemaining = GameSetupController.getInstance().getTimeLimit();
+        this.treatyTimeRemaining = gameSetupController.getTreatyTime();
+        this.timeRemaining = gameSetupController.getTimeLimit();
         this.gameTime = 0;
 
         if (treatyTimeRemaining == 0) treatyTimeEnded = true;
@@ -251,7 +313,7 @@ public class GameController {
 
         deadPlayers.clear();
         alivePlayers.clear();
-        alivePlayers.addAll(GameSetupController.getInstance().getParticipatingPlayers());
+        alivePlayers.addAll(gameSetupController.getParticipatingPlayers());
 
         gameRunning = true;
         updater.scheduleSyncRepeatingTask(plugin, this::updateScoreboard, 0, 5);
@@ -287,13 +349,13 @@ public class GameController {
                         player.playSound(player, Sound.BLOCK_ANVIL_LAND, 0.5f, 1f);
                     }
 
-                    overworld.getWorldBorder().setSize(GameSetupController.getInstance().getDeathmatchMapSize(), 600L);
+                    overworld.getWorldBorder().setSize(gameSetupController.getDeathmatchMapSize(), 600L);
 
                     Messenger.MessageBroadcastTranslated(false, "Game.Info.GameEnded");
                     timeLimitEnded = true;
                 }
             }
-        , 0l, 20);
+        , 0L, 20);
 
         StatsController.getInstance().initialize(alivePlayers);
 
@@ -302,13 +364,6 @@ public class GameController {
 
     public void killPlayer(Player player) { killPlayer(player.getDisplayName()); }
     public void killPlayer(String player) {
-        for (String alivePlayer : alivePlayers)
-            if (alivePlayer.equals(player)) {
-                StatsController.getInstance().setPlace(alivePlayer, alivePlayers.size(), alivePlayers.size()+deadPlayers.size());
-                alivePlayers.remove(alivePlayer);
-                deadPlayers.add(alivePlayer);
-                break;
-            }
 
         Messenger.MessageBroadcastTranslated(false,"Game.Info.PlayerEliminated", player);
 
@@ -316,48 +371,120 @@ public class GameController {
             onlinePlayer.playSound(onlinePlayer, Sound.ITEM_TRIDENT_THUNDER, 1f, 1.5f);
         }
 
-        if (alivePlayers.size() == 1)
-            endGame(alivePlayers.get(0));
+        switch (gameSetupController.getTeamFormat()) {
+            case SOLO:
+                for (String alivePlayer : alivePlayers)
+                    if (alivePlayer.equals(player)) {
+                        StatsController.getInstance().setPlace(alivePlayer, alivePlayers.size(), alivePlayers.size()+deadPlayers.size());
+                        alivePlayers.remove(alivePlayer);
+                        deadPlayers.add(alivePlayer);
+                        break;
+                    }
+
+                if (alivePlayers.size() == 1)
+                    endGame(alivePlayers.get(0));
+                break;
+            case RANDOM_SQUAD:
+                for (String alivePlayer : alivePlayers)
+                    if (alivePlayer.equals(player)) {
+                        alivePlayers.remove(alivePlayer);
+                        deadPlayers.add(alivePlayer);
+                        break;
+                    }
+
+                Team eliminatedTeam = TeamsController.getInstance().killPlayer(player);
+                if (eliminatedTeam != null) {
+                    Messenger.MessageBroadcastTranslated(false,"Game.Info.TeamEliminated", eliminatedTeam.teamName);
+                    for (String eliminatedTeamPlayer : eliminatedTeam.players)
+                        StatsController.getInstance().setPlace(
+                                eliminatedTeamPlayer,
+                                TeamsController.getInstance().getAliveTeamList().size() + 1,
+                                TeamsController.getInstance().getTeamList().size()
+                        );
+                }
+
+                Team winnerTeam = TeamsController.getInstance().checkForWinner();
+                if (winnerTeam != null)
+                    endGame(winnerTeam.teamName, winnerTeam);
+                break;
+            case FOUND_SQUAD:
+            case DRAFTED_SQUAD:
+            case PREMADE_SQUAD:
+                // Not implemented yet
+                break;
+        }
 
         updateScoreboard();
     }
 
     public void endGame(String winner) {
+        endGame(winner, null);
+    }
+
+    public void endGame(String winner, Team winnerTeam) {
         if (!gameRunning) return;
         if (winner.equals(""))
             Messenger.MessageBroadcastTranslated(false, "Game.Info.GameAborted");
         else {
-            Player winnerPlayer = Bukkit.getServer().getPlayer(winner);
-            StatsController.getInstance().setPlace(winner, 1, alivePlayers.size()+deadPlayers.size());
+            if (gameSetupController.getTeamFormat() == TeamFormat.SOLO) {
+                StatsController.getInstance().setPlace(winner, 1, alivePlayers.size() + deadPlayers.size());
 
-            Messenger.MessageBroadcastTranslated(false,"Game.Info.WinnerPlayer", winner);
+                Messenger.MessageBroadcastTranslated(false, "Game.Info.WinnerPlayer", winner);
 
-            for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
-                if (onlinePlayer.getDisplayName().equals(winner)) {
-                    Messenger.SendTitleTranslated(
+                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
+                    if (onlinePlayer.getDisplayName().equals(winner)) {
+                        Messenger.SendTitleTranslated(
+                                onlinePlayer,
+                                "Game.Info.YouWinTitle.Main",
+                                new String[]{},
+                                "Game.Info.YouWinTitle.Secondary",
+                                new String[]{},
+                                0, 40, 400
+                        );
+                    } else {
+                        Messenger.SendTitleTranslated(
+                                onlinePlayer,
+                                "Game.Info.WinnerPlayerTitle.Main",
+                                new String[]{winner},
+                                "Game.Info.WinnerPlayerTitle.Secondary",
+                                new String[]{},
+                                0, 40, 400
+                        );
+                    }
+                    onlinePlayer.playSound(
                             onlinePlayer,
-                            "Game.Info.YouWinTitle.Main",
-                            new String[]{},
-                            "Game.Info.YouWinTitle.Secondary",
-                            new String[]{},
-                            0, 40, 400
-                            );
-                } else {
-                    Messenger.SendTitleTranslated(
-                            onlinePlayer,
-                            "Game.Info.WinnerPlayerTitle.Main",
-                            new String[]{winner},
-                            "Game.Info.WinnerPlayerTitle.Secondary",
-                            new String[]{},
-                            0, 40, 400
+                            Sound.ENTITY_ENDER_DRAGON_DEATH,
+                            0.5f,
+                            0.5f
                     );
                 }
-                onlinePlayer.playSound(
-                        winnerPlayer,
-                        Sound.ENTITY_ENDER_DRAGON_DEATH,
-                        0.5f,
-                        0.5f
-                );
+            } else {
+                for (String player : winnerTeam.players)
+                    StatsController.getInstance().setPlace(player, 1, TeamsController.getInstance().getTeamList().size());
+
+                Messenger.MessageBroadcastTranslated(false, "Game.Info.WinnerTeam", winner);
+
+                for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {
+                    if (winnerTeam.players.contains(onlinePlayer.getDisplayName())) {
+                        Messenger.SendTitleTranslated(
+                                onlinePlayer,
+                                "Game.Info.YouWinTitle.Main",
+                                new String[]{},
+                                "Game.Info.YouWinTitle.Secondary",
+                                new String[]{},
+                                0, 40, 400
+                        );
+                    } else {
+                        Messenger.SendTitleTranslated(
+                                onlinePlayer,
+                                "Game.Info.WinnerTeamTitle.Main",
+                                new String[]{winner},
+                                "Game.Info.WinnerTeamTitle.Secondary",
+                                new String[]{},
+                                0, 40, 400
+                        );
+                    }
+                }
             }
         }
 
@@ -369,7 +496,7 @@ public class GameController {
         updater.cancelTasks(plugin);
 
         gameRunning = false;
-        GameSetupController.getInstance().updateScoreboard();
+        gameSetupController.updateScoreboard();
     }
 
     public String getFormattedTimeRemaining() {

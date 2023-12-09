@@ -5,5 +5,6 @@ public enum GameStartCode {
     NOT_ENOUGH_PLAYERS,
     PLAYERS_NOT_CONNECTED,
     NOT_ENOUGH_VALID_SPAWNS,
-    UNKERR
+    UNEVEN_TEAM_SIZES,
+    UNKERR,
 }

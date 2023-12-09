@@ -4,8 +4,7 @@ import ilevelin.ileuhc.utils.enums.ChatColor;
 import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
 import ilevelin.ileuhc.utils.textFormatting.TextFormatterBlock;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LangEN implements Lang {
 
@@ -17,8 +16,15 @@ public class LangEN implements Lang {
         return instance;
     }
 
-    public String getTranslation(String code){
-        return translations.getOrDefault(code, code);
+    public String getTranslation(String code){ return translations.getOrDefault(code, code); }
+    public Set<String> getKeys() { return translations.keySet(); }
+    public List<String> checkKeys( Set<String> modelKeySet ) {
+        Set<String> localKeys = translations.keySet();
+        List<String> missingKeys = new ArrayList<>();
+        modelKeySet.forEach(modelKey -> {
+            if (!localKeys.contains(modelKey)) missingKeys.add(modelKey);
+        });
+        return missingKeys;
     }
 
     private LangEN(){
@@ -108,6 +114,10 @@ public class LangEN implements Lang {
                 new FormattedTextBlock("The map doesn't have enough valid spawns for all the players/teams. Try modifying the map size or generating a new world with a new seed.")
                         .setColor(ChatColor.RED).toString()
         );
+        translations.put("Command.Start.Error.UnevenTeams",
+                new FormattedTextBlock("The number of players and the configurated size for teams would leave uneven teams. Try changing the the team sizes or inviting more players to play.")
+                        .setColor(ChatColor.RED).toString()
+        );
         translations.put("Command.Start.Error.Unknown",
                 new FormattedTextBlock("An unknown error has occurred while trying to start the game. Check the server console for more details.")
                         .setColor(ChatColor.RED).toString()
@@ -151,14 +161,28 @@ public class LangEN implements Lang {
         translations.put("Game.Info.PlayerEliminated",
                 new FormattedTextBlock().setText("$0")
                         .setColor(ChatColor.RED).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString() +
-                new FormattedTextBlock().setText("has been eliminated!")
+                new FormattedTextBlock().setText(" has been eliminated!")
+                        .setColor(ChatColor.DARK_RED).toString()
+        );
+        translations.put("Game.Info.TeamEliminated",
+                new FormattedTextBlock().setText("The team ")
+                        .setColor(ChatColor.DARK_RED).toString() +
+                new FormattedTextBlock().setText("$0")
+                        .setColor(ChatColor.RED).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString() +
+                new FormattedTextBlock().setText(" has been eliminated!")
                         .setColor(ChatColor.DARK_RED).toString()
         );
         translations.put("Game.Info.WinnerPlayer",
                 new FormattedTextBlock("$0")
                         .setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString()+
-                new FormattedTextBlock("is the winner!")
+                new FormattedTextBlock(" is the winner!")
                         .setColor(ChatColor.DARK_GREEN).toString()
+        );
+        translations.put("Game.Info.WinnerTeam",
+                new FormattedTextBlock("$0")
+                        .setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString()+
+                new FormattedTextBlock(" are the winners!")
+                        .setColor(ChatColor.RED).toStringWithoutResetEnd()
         );
         translations.put("Game.Info.GameAborted",
                 new FormattedTextBlock("Game aborted by an administrator")
@@ -178,6 +202,10 @@ public class LangEN implements Lang {
         );
         translations.put("Game.Info.WinnerPlayerTitle.Secondary",
                 new FormattedTextBlock("is the winner!")
+                        .setColor(ChatColor.RED).toStringWithoutResetEnd()
+        );
+        translations.put("Game.Info.WinnerTeamTitle.Secondary",
+                new FormattedTextBlock("are the winners!")
                         .setColor(ChatColor.RED).toStringWithoutResetEnd()
         );
 

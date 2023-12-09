@@ -4,8 +4,7 @@ import ilevelin.ileuhc.utils.enums.ChatColor;
 import ilevelin.ileuhc.utils.textFormatting.FormattedTextBlock;
 import ilevelin.ileuhc.utils.textFormatting.TextFormatterBlock;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LangCA implements Lang {
 
@@ -17,8 +16,15 @@ public class LangCA implements Lang {
         return instance;
     }
 
-    public String getTranslation(String code){
-        return translations.getOrDefault(code, code);
+    public String getTranslation(String code){ return translations.getOrDefault(code, code); }
+    public Set<String> getKeys() { return translations.keySet(); }
+    public List<String> checkKeys(Set<String> modelKeySet ) {
+        Set<String> localKeys = translations.keySet();
+        List<String> missingKeys = new ArrayList<>();
+        modelKeySet.forEach(modelKey -> {
+            if (!localKeys.contains(modelKey)) missingKeys.add(modelKey);
+        });
+        return missingKeys;
     }
 
     private LangCA(){
@@ -108,6 +114,10 @@ public class LangCA implements Lang {
                 new FormattedTextBlock("El mapa no te suficients punts d'aparició válids per tots els jugadors/equips. Intenta modificar el tamany del mapa o generar un nou mon amb una nova llavor")
                         .setColor(ChatColor.RED).toString()
         );
+        translations.put("Command.Start.Error.UnevenTeams",
+                new FormattedTextBlock("El nombre de jugadors i el tamany dels equips configurat resultaria amb equips desiguals. Proba a cambiar el tamany dels equips o invitar a mes jugadors.")
+                        .setColor(ChatColor.RED).toString()
+        );
         translations.put("Command.Start.Error.Unknown",
                 new FormattedTextBlock("Ha ocorregut un error desconegut al intentar escomençar la partida. Comprova la consola del servidor per obtindre mes detalls.")
                         .setColor(ChatColor.RED).toString()
@@ -151,14 +161,28 @@ public class LangCA implements Lang {
         translations.put("Game.Info.PlayerEliminated",
                 new FormattedTextBlock().setText("$0")
                         .setColor(ChatColor.RED).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString() +
-                        new FormattedTextBlock().setText("ha sigut eliminat!")
-                                .setColor(ChatColor.DARK_RED).toString()
+                new FormattedTextBlock().setText(" ha sigut eliminat!")
+                        .setColor(ChatColor.DARK_RED).toString()
+        );
+        translations.put("Game.Info.TeamEliminated",
+                new FormattedTextBlock().setText("L'equip ")
+                        .setColor(ChatColor.DARK_RED).toString() +
+                new FormattedTextBlock().setText("$0")
+                        .setColor(ChatColor.RED).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString() +
+                new FormattedTextBlock().setText(" ha sigut eliminat!")
+                        .setColor(ChatColor.DARK_RED).toString()
         );
         translations.put("Game.Info.WinnerPlayer",
                 new FormattedTextBlock("$0")
                         .setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString()+
-                        new FormattedTextBlock("es el guanyador!")
-                                .setColor(ChatColor.DARK_GREEN).toString()
+                new FormattedTextBlock(" es el guanyador!")
+                        .setColor(ChatColor.DARK_GREEN).toString()
+        );
+        translations.put("Game.Info.WinnerPlayer",
+                new FormattedTextBlock("$0")
+                        .setColor(ChatColor.GREEN).setFormatterBlock(new TextFormatterBlock().setBold(true)).toString()+
+                new FormattedTextBlock(" son els guanyadors!")
+                        .setColor(ChatColor.RED).toStringWithoutResetEnd()
         );
         translations.put("Game.Info.GameAborted",
                 new FormattedTextBlock("Partida abortada per un administrador")
@@ -178,6 +202,10 @@ public class LangCA implements Lang {
         );
         translations.put("Game.Info.WinnerPlayerTitle.Secondary",
                 new FormattedTextBlock("es el guanyador!")
+                        .setColor(ChatColor.RED).toStringWithoutResetEnd()
+        );
+        translations.put("Game.Info.WinnerTeamTitle.Secondary",
+                new FormattedTextBlock("son els guanyadors!")
                         .setColor(ChatColor.RED).toStringWithoutResetEnd()
         );
 
